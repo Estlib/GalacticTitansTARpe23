@@ -66,10 +66,10 @@ namespace GalacticTitans.Controllers
                 ProfileCreatedAt = DateTime.UtcNow,
                 ProfileModifiedAt = DateTime.UtcNow,
             };
-            TitanOwnership startingTitan = new();
-            startingTitan = await TitansController.NewRandomTitanOwnership(startingTitan);// call controller method
-            newprofile.MyTitans.Add(startingTitan);
-            await _context.SaveChangesAsync();
+            //TitanOwnership startingTitan = new();
+            //startingTitan = await TitansController.NewRandomTitanOwnership(startingTitan);// call controller method
+            //newprofile.MyTitans.Add(startingTitan);
+            //await _context.SaveChangesAsync();
             // TODO: caLll create ownership method from titanservices.
             // return here, into startingtitan, the generated titan
             // append this titan to the user
