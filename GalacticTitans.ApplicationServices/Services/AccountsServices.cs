@@ -51,7 +51,7 @@ namespace GalacticTitans.ApplicationServices.Services
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 _emailsServices.SendEmailToken(new EmailTokenDto(), token);
             }
-            await _playerProfilesServices.Create((string)user.Id);
+            //await _playerProfilesServices.Create((string)user.Id);
             return user;
         }
 

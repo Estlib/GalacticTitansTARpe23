@@ -227,7 +227,7 @@ namespace GalacticTitans.Controllers
                         return RedirectToAction("ListUsers", "Administrations");
                     }
 
-                    return RedirectToAction("NewProfile", "PlayerProfiles");
+                    //return RedirectToAction("NewProfile", "PlayerProfiles");
 
                     //List<string> errordatas = 
                     //    [
@@ -253,6 +253,11 @@ namespace GalacticTitans.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
+            return RedirectToAction("AccountCreated");
+        }
+        [HttpGet]
+        public IActionResult AccountCreated()
+        {
             return View();
         }
 
@@ -266,7 +271,7 @@ namespace GalacticTitans.Controllers
             if (user == null) 
             {
                 ViewBag.ErrorMessage = $"The user with id of {userId} is not valid";
-                return View("NotFound");
+                return View("Shared", "Error");
             }
             var result = await _userManager.ConfirmEmailAsync(user, token);
             List<string> errordatas =
