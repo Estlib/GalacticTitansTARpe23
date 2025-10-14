@@ -19,9 +19,9 @@ namespace GalacticTitans.ApplicationServices.Services
         {
             var email = new MimeMessage();
 
-            _configuration.GetSection("EmailUserName").Value = "supermariobrosmailee";
+            _configuration.GetSection("EmailUserName").Value = "galactictitansemailer";
             _configuration.GetSection("EmailHost").Value = "smtp.gmail.com";
-            _configuration.GetSection("EmailPassword").Value = "jpwc updb ffaf dmvl ";
+            _configuration.GetSection("EmailPassword").Value = "jtrs exzx xuat bpwt ";
 
 
             email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailUserName").Value));
