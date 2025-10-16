@@ -248,9 +248,18 @@ namespace GalacticTitans.Controllers
                     //return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
                 }
-                foreach (var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError("", error.Description);
+
+                    List<string> rawerrors = new();
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                        rawerrors.Add(error.Description.ToString());
+                    }
+                    List<string> errordatas = ["Area", "Register", "Issue", "Registration failure", "ModelState errors =>", $"{string.Join("\n", rawerrors.ToArray())}"];
+                    ViewBag.ErrorDatas = errordatas;
+                    return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
                 }
             }
             return RedirectToAction("AccountCreated");
