@@ -46,6 +46,7 @@ builder.Services.Configure<CustomEmailConfirmationTokenProviderOptions>(
 
 
 var app = builder.Build();
+await RunTimeSeeder.AddDefaultAdmin(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

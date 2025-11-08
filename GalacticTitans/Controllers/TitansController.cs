@@ -2,10 +2,12 @@
 using GalacticTitans.Core.Dto;
 using GalacticTitans.Core.ServiceInterface;
 using GalacticTitans.Data;
+using GalacticTitans.Models;
 using GalacticTitans.Models.Stories;
 using GalacticTitans.Models.Titans;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace GalacticTitans.Controllers
 {
@@ -32,6 +34,12 @@ namespace GalacticTitans.Controllers
         T I T A N S 
          
          */
+
+        /// <summary>
+        /// Get admin-level index
+        /// 
+        /// </summary>
+        /// <returns>view</returns>
         [HttpGet]
         public IActionResult Index()
         {
@@ -57,14 +65,25 @@ namespace GalacticTitans.Controllers
                 });
             return View(resultingInventory);
         }
+        /// <summary>
+        /// Get CREATE
+        /// </summary>
+        /// <returns>View to add titan, admin</returns>
         [HttpGet]
         public IActionResult Create() 
         {
             TitanCreateViewModel vm = new();
             return View("Create",vm);
         }
+
+        /// <summary>
+        /// POST CREATE, admin
+        /// </summary>
+        /// <param name="vm">model that the view passes onto this method</param>
+        /// <returns></returns>
         [HttpPost , ActionName("Create")]
         [ValidateAntiForgeryToken]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Create(TitanCreateViewModel vm)
         {
             var dto = new TitanDto()
@@ -99,19 +118,41 @@ namespace GalacticTitans.Controllers
 
             if (result == null)
             {
-                return RedirectToAction("Index");
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Create-Post",
+                        "StatusMessage", "Could not add this titan.",
+                        "TitanDto",$"{dto}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
 
             return RedirectToAction("Index", vm);
         }
+        /// <summary>
+        /// GET DETAILS
+        /// </summary>
+        /// <param name="id">id of titan</param>
+        /// <returns>details view for singular titan</returns>
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Details(Guid id /*, Guid ref*/)
         {
             var titan = await _titansServices.DetailsAsync(id);
 
-            if (titan == null) 
+            if (titan == null)
             {
-                return NotFound(); // <- TODO; custom partial view with message, titan is not located
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Details",
+                        "StatusMessage", "Could not find Titan.",
+                        "ID",$"{id}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
 
             var images = await _context.FilesToDatabase
@@ -145,13 +186,36 @@ namespace GalacticTitans.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Update(Guid id)
         {
-            if (id == null) { return NotFound(); }
+            if (id == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Update-Get",
+                        "StatusMessage", "Cannot seek a null id.",
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
 
             var titan = await _titansServices.DetailsAsync(id);
 
-            if (titan == null) { return NotFound(); }
+            if (titan == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Update-Get",
+                        "StatusMessage", "Could not find requested Titan for editing.",
+                        "ID",$"{id}",
+                        "Titan",$"{titan}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
 
             var images = await _context.FilesToDatabase
                 .Where(x => x.TitanID == id)
@@ -188,6 +252,7 @@ namespace GalacticTitans.Controllers
             return View("Update", vm);
         }
         [HttpPost]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Update(TitanCreateViewModel vm)
         {
             var dto = new TitanDto()
@@ -221,17 +286,52 @@ namespace GalacticTitans.Controllers
             };
             var result = await _titansServices.Update(dto);
 
-            if (result == null) { return RedirectToAction("Index"); }
+            if (result == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Update-Post",
+                        "StatusMessage", "Could not edit this titan.",
+                        "Result",$"{result}",
+                        "TitanDto",$"{dto}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
             return RedirectToAction("Index", vm);
         }
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null) { return NotFound(); }
+            if (id == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Delete-Get",
+                        "StatusMessage", "Cannot seek a null id.",
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
 
             var titan = await _titansServices.DetailsAsync(id);
 
-            if (titan == null) { return NotFound(); };
+            if (titan == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "Delete-Get",
+                        "StatusMessage", "Could not find requested Titan for removal.",
+                        "ID",$"{id}",
+                        "Titan",$"{titan}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            };
 
             var images = await _context.FilesToDatabase
                 .Where(x => x.TitanID == id)
@@ -267,16 +367,30 @@ namespace GalacticTitans.Controllers
         }
 
         [HttpPost]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> DeleteConfirmation(Guid id)
         {
             var titanToDelete = await _titansServices.Delete(id);
 
-            if (titanToDelete == null) { return RedirectToAction("Index"); }
+            if (titanToDelete == null)
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "DeleteConfirmation-Post",
+                        "StatusMessage", "Could not find requested Titan for removal.",
+                        "ID",$"{id}",
+                        "Titan",$"{titanToDelete}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            };
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> RemoveImage(TitanImageViewModel vm)
         {
             var dto = new FileToDatabaseDto()
@@ -284,7 +398,19 @@ namespace GalacticTitans.Controllers
                 ID = vm.ImageID
             };
             var image = await _fileServices.RemoveImageFromDatabase(dto);
-            if (image == null) { return RedirectToAction("Index"); }
+            if (image == null) 
+            {
+                List<string> errordatas =
+                    [
+                        "Area", "Titans",
+                        "Issue", "RemoveImage-Post",
+                        "StatusMessage", "Could not find titans image.",
+                        "TitanImageViewModel",$"{vm}",
+                        "Image",$"{image}"
+                    ];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
             return RedirectToAction("Index");
         }
 
