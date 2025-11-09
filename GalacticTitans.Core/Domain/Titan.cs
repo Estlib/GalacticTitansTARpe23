@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalacticTitans.Core.Domain.SupportingDomain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,6 @@ namespace GalacticTitans.Core.Domain
     public enum TitanType
     {
         Earth, Solid, Digital, BlackHole, Liquid, Gas, Plasma, Nebulous, Entity, Humanoid, Demonic, AlternateDimension, Unknown
-    }
-    public enum TitanStatus
-    {
-        Dead, Alive, GuardingPlanet
     }
 
 

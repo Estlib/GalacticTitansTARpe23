@@ -1,4 +1,5 @@
-﻿@model GalacticTitans.Models.Titans.TitanCreateViewModel
+﻿@using GalacticTitans.Core.Domain.SupportingDomain
+@model GalacticTitans.Models.Titans.TitanCreateViewModel
 
 <div>
     <form method="post" asp-action="Update" enctype="multipart/form-data">
@@ -7,6 +8,15 @@
             <label asp-for="TitanName" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
                 <input asp-for="TitanName" class="form-control" />
+            </div>
+        </div>
+
+        <div>
+            <label asp-for="TitanStatus" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <select asp-for="TitanStatus" asp-items="Html.GetEnumSelectList<TitanStatus>()">
+                    <option value="">Set status of Titan</option>
+                </select>
             </div>
         </div>
 

@@ -1,4 +1,5 @@
 using GalacticTitans.Core.Domain;
+using GalacticTitans.Core.Domain.SupportingDomain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

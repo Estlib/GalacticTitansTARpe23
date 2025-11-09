@@ -1,4 +1,5 @@
 ﻿using GalacticTitans.Core.Domain;
+using GalacticTitans.Core.Domain.SupportingDomain;
 using GalacticTitans.Core.Dto;
 using GalacticTitans.Core.ServiceInterface;
 using GalacticTitans.Data;
@@ -39,7 +40,7 @@ namespace GalacticTitans.ApplicationServices.Services
             titan.TitanXP = 0;
             titan.TitanXPNextLevel = 100;
             titan.TitanLevel = 0;
-            titan.TitanStatus = Core.Domain.TitanStatus.Alive;
+            titan.TitanStatus = TitanStatus.Alive;
             titan.TitanWasBorn = DateTime.Now;
             titan.TitanDied = DateTime.Parse("01/01/9999 00:00:00");
 
@@ -79,7 +80,7 @@ namespace GalacticTitans.ApplicationServices.Services
             titan.TitanXP = dto.TitanXP;
             titan.TitanXPNextLevel = dto.TitanXPNextLevel;
             titan.TitanLevel = dto.TitanLevel;
-            titan.TitanStatus = (Core.Domain.TitanStatus)dto.TitanStatus;
+            titan.TitanStatus = dto.TitanStatus;
             titan.TitanWasBorn = dto.TitanWasBorn;
             titan.TitanDied = DateTime.Parse("01/01/9999 00:00:00");
 
@@ -128,7 +129,7 @@ namespace GalacticTitans.ApplicationServices.Services
             titan.TitanXP = 0;
             titan.TitanXPNextLevel = 100;
             titan.TitanLevel = 0;
-            titan.TitanStatus = Core.Domain.TitanStatus.Alive;
+            titan.TitanStatus = TitanStatus.Alive;
             titan.TitanWasBorn = DateTime.Now;
             titan.TitanDied = DateTime.Parse("01/01/9999 00:00:00");
 

@@ -329,6 +329,12 @@ namespace GalacticTitans.Controllers
         [HttpGet] // user
         public IActionResult SolarSystemExplore(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                List<string> errordatas = ["Area", "SolarSystemExplore", "Issue", "Guid id", "StatusMessage", "No id for system to display provided"];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
             var thisSystemPlanets = _context.AstralBodies
                 .OrderByDescending(y => y.CreatedAt)
                 .Where(z => z.SolarSystemID == id.ToString())
@@ -368,8 +374,11 @@ namespace GalacticTitans.Controllers
             //var result = thisSystem.ToList();
             if (!thisSystem.Any())
             {
-                return RedirectToAction("./Views/Home/Error");
+                List<string> errordatas = ["Area", "SolarSystemExplore", "Issue", "!thisSystem.Any()", "StatusMessage", "No solar systems found to display"];
+                ViewBag.ErrorDatas = errordatas;
+                return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
+
             return View("SolarSystemExplore", thisSystem.First());
         }
 

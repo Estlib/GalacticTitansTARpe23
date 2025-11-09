@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GalacticTitans.Core.Domain.SupportingDomain;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,6 @@ namespace GalacticTitans.Core.Dto
     public enum TitanType
     {
         Earth, Solid, Digital, BlackHole, Liquid, Gas, Plasma, Nebulous, Entity, Humanoid, Demonic, AlternateDimension, Unknown
-    }
-    public enum TitanStatus
-    {
-        Dead, Alive, GuardingPlanet
     }
     public class TitanDto
     {
