@@ -128,9 +128,49 @@
     </div>
 
     <footer class="border-top footer bg-white galacticGradient gTZRG">
-        <div class="container text-dark">
-            &copy; 2024 - Galactic Titans - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+        @* 
+                            TODO: rewrite getting claim, using proper microsoft documentation.
+                            this hack works, but its a hack.
+                        https://learn.microsoft.com/en-us/aspnet/core/security/authorization/claims?view=aspnetcore-9.0
+                        *@
+        @{
+        }
+        @if (signInManager.IsSignedIn(User))
+        {
+            var empty = "";
+            var test = User.Claims;
+            List<string> parsedclaims = new List<string>();
+            foreach (var claim in test)
+            {
+                parsedclaims.Add(claim.ToString());
+                Console.WriteLine(claim);
+                if (claim.ToString().Contains("nameidentifier"))
+                {
+                    empty = claim.ToString().Substring(70, 36);
+                }
+            }
+            Guid userid = Guid.Parse(empty);
+            var user = await userManager.FindByIdAsync(userid.ToString());
+            userprofile = await PlayerProfilesServices.DetailsAsync(userid);
+            if (user.ProfileType == true)
+            {
+                <div class="container text-dark">
+                    &copy; 2024 - Galactic Titans - <a class="text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="ResourceListing">Developer Resources</a>
+                </div>
+            }
+            else
+            {
+                <div class="container text-dark">
+                    &copy; 2024 - Galactic Titans - <a class="text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="Privacy">Terms of Usage</a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="container text-dark">
+                &copy; 2024 - Galactic Titans - <a class="text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="Privacy">Terms of Usage</a>
+            </div>
+        }
     </footer >
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

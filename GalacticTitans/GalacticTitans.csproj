@@ -32,6 +32,7 @@
     <Folder Include="Views\ErrorPartial\SCRs\" />
     <Folder Include="Views\Planets\" />
     <Folder Include="wwwroot\lib\gameasset\font\" />
+    <Folder Include="wwwroot\lib\gameasset\audio\" />
   </ItemGroup>
 
 </Project>
