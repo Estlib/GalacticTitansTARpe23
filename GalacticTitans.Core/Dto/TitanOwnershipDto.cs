@@ -21,7 +21,8 @@ namespace GalacticTitans.Core.Dto
         public int SpecialAttackPower { get; set; }
         public DateTime TitanWasBorn { get; set; }
         public DateTime TitanDied { get; set; }
-        //public string OwnedByPlayerProfile { get; set; } //is string but holds guid
+        public string? OwnedByPlayerProfile { get; set; } //is string but holds guid, id of player whom the ownership belongs to
+        public string? IsOwnershipOfThisTitan { get; set; } //is string but holds guid, id of titan that this ownership is based on
 
         //image 
         public List<IFormFile> Files { get; set; }

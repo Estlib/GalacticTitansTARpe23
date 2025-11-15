@@ -35,6 +35,14 @@ namespace GalacticTitans.Controllers
             _emailsServices = emailsServices;
             _playerProfilesServices = playerProfilesServices;
         }
+
+        /// <summary>
+        /// VIEW-GET.
+        /// Seeks user, checks if user has password.
+        /// If has password, redirects to "ChangePassword" view.
+        /// If user doesnt have password, returns "AddPassword" view.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> AddPassword()
         {
@@ -46,7 +54,15 @@ namespace GalacticTitans.Controllers
             }
             return View();
         }
-
+        /// <summary>
+        /// DATA-POST.
+        /// Seeks user. Gets result, using AddPasswordAsync method where user that was seeked, is given to it with password from model as second parameter.
+        /// Checks if adding of password is unsuccessful, in which case enumerates errors, and returns the view.
+        /// If is successful, then it refreshes the users signin status, and returns "AddPasswordConfirmation" view.
+        /// ModelState validity is checked, possible errors not given a view in GT error display system.
+        /// </summary>
+        /// <param name="model">Model containing necessary data</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddPassword(AddPasswordViewModel model)
         {
@@ -67,19 +83,31 @@ namespace GalacticTitans.Controllers
             }
             return View(model);
         }
-
+        /// <summary>
+        /// VIEW-GET. returns "ChangePassword" view.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
-
+        /// <summary>
+        /// DATA-POST. checks if user is available, if not, redirects to "Login" view.
+        /// Edits users password using ChangePassWordAsync(), giving it found user, old password from model and new password from model.
+        /// Checks if changing of password is unsuccessful, in which case enumerates errors, and returns the view.
+        /// If is successful, then it refreshes the users signin status, and returns "ChangePasswordConfirmation" view.
+        /// ModelState validity is checked, user null is checked, possible errors not given a view in GT error display system.
+        /// If ModelState validity is false, it returns the same view, with the data.
+        /// </summary>
+        /// <param name="model">Model containing necessary data</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.GetUserAsync (User);
+                var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
                     return RedirectToAction("Login");
@@ -99,6 +127,11 @@ namespace GalacticTitans.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// VIEW-GET. returns "ForgotPassword" view.
+        /// Has [AllowAnonymous] so users that are not logged in can change password.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()
@@ -227,7 +260,7 @@ namespace GalacticTitans.Controllers
                         return RedirectToAction("ListUsers", "Administrations");
                     }
 
-                    //return RedirectToAction("NewProfile", "PlayerProfiles");
+                    return RedirectToAction("NewProfile", "PlayerProfiles");
 
                     //List<string> errordatas = 
                     //    [
