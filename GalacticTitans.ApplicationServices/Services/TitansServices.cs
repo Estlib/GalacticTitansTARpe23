@@ -119,8 +119,62 @@ namespace GalacticTitans.ApplicationServices.Services
             return result;
         }
 
-        public async Task<TitanOwnership> CreateRandom(Titan sourceTitan)
+        public async Task<TitanOwnership> CreateRandom(Guid userid)
         {
+            int titancount = await _context.Titans.CountAsync();
+            if (titancount == 0)
+            {
+                return null;
+            }
+            int RNG = new Random().Next(0, titancount);
+            //Titan sourceTitan = _context.Titans.OrderByDescending(x => x.TitanName).Take(RNG);
+            Titan sourceTitan = await _context.Titans.OrderByDescending(x => x.TitanName)
+                .Skip(RNG)
+                .FirstAsync();
+
+
+            TitanOwnership titan = new TitanOwnership();
+
+            // set by service
+            titan.ID = Guid.NewGuid();
+            titan.TitanHealth = 100;
+            titan.TitanXP = 0;
+            titan.TitanXPNextLevel = 100;
+            titan.TitanLevel = 0;
+            titan.TitanStatus = TitanStatus.Alive;
+            titan.TitanWasBorn = DateTime.Now;
+            titan.TitanDied = DateTime.Parse("01/01/9999 00:00:00");
+
+            //set by user
+            titan.TitanName = sourceTitan.TitanName;
+            titan.TitanType = (Core.Domain.TitanType)sourceTitan.TitanType;
+            titan.PrimaryAttackName = sourceTitan.PrimaryAttackName;
+            titan.PrimaryAttackPower = sourceTitan.PrimaryAttackPower;
+            titan.SecondaryAttackName = sourceTitan.SecondaryAttackName;
+            titan.SecondaryAttackPower = sourceTitan.SecondaryAttackPower;
+            titan.SpecialAttackName = sourceTitan.SpecialAttackName;
+            titan.SpecialAttackPower = sourceTitan.SpecialAttackPower;
+            titan.OwnedByPlayerProfile = userid.ToString();
+            titan.IsOwnershipOfThisTitan = sourceTitan.ID.ToString();
+
+            //set for db
+            titan.OwnershipCreatedAt = DateTime.Now;
+            titan.OwnershipUpdatedAt = DateTime.Now;
+
+            ////files
+            //if (dto.Files != null)
+            //{
+            //    _fileServices.UploadFilesToDatabase(dto, titan);
+            //}
+
+            await _context.TitanOwnerships.AddAsync(titan);
+            await _context.SaveChangesAsync();
+
+            return titan;
+        }
+        public async Task<TitanOwnership> CreateRandomFromExisting(Titan sourceTitan)
+        {
+
             TitanOwnership titan = new TitanOwnership();
 
             // set by service
@@ -144,8 +198,8 @@ namespace GalacticTitans.ApplicationServices.Services
             titan.SpecialAttackPower = sourceTitan.SpecialAttackPower;
 
             //set for db
-            titan.CreatedAt = DateTime.Now;
-            titan.UpdatedAt = DateTime.Now;
+            titan.OwnershipCreatedAt = DateTime.Now;
+            titan.OwnershipUpdatedAt = DateTime.Now;
 
             ////files
             //if (dto.Files != null)

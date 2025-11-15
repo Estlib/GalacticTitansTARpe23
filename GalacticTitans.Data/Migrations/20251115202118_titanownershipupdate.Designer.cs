@@ -4,6 +4,7 @@ using GalacticTitans.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GalacticTitans.Data.Migrations
 {
     [DbContext(typeof(GalacticTitansContext))]
-    partial class GalacticTitansContextModelSnapshot : ModelSnapshot
+    [Migration("20251115202118_titanownershipupdate")]
+    partial class titanownershipupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,14 +105,14 @@ namespace GalacticTitans.Data.Migrations
                             Id = "10000000-1000-1000-1000-100010001000",
                             AccessFailedCount = 0,
                             City = "testPassword1!",
-                            ConcurrencyStamp = "aa7bb331-3ebd-4476-b19f-9118868c8d85",
+                            ConcurrencyStamp = "f2f6a02b-2f2e-4f52-8466-2a8ca7fffc9b",
                             Email = "galactus@titanus.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
                             PlayerProfileID = new Guid("10000000-1000-1000-1000-100010001000"),
                             ProfileType = true,
-                            SecurityStamp = "e223a6d5-7e5c-4c61-8734-f164adee30be",
+                            SecurityStamp = "54247cd9-3935-4b45-9711-ab516857f17b",
                             TwoFactorEnabled = false,
                             UserName = "galactus@titanus.com"
                         });
@@ -364,6 +367,11 @@ namespace GalacticTitans.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("PrimaryAttackName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -420,6 +428,10 @@ namespace GalacticTitans.Data.Migrations
 
                     b.ToTable("Titans");
 
+                    b.HasDiscriminator().HasValue("Titan");
+
+                    b.UseTphMappingStrategy();
+
                     b.HasData(
                         new
                         {
@@ -442,83 +454,6 @@ namespace GalacticTitans.Data.Migrations
                             TitanXPNextLevel = 100,
                             UpdatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("GalacticTitans.Core.Domain.TitanOwnership", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("IsOwnershipOfThisTitan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnedByPlayerProfile")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OwnershipCreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OwnershipUpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("PlayerProfileID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PrimaryAttackName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PrimaryAttackPower")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SecondaryAttackName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SecondaryAttackPower")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SpecialAttackName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SpecialAttackPower")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TitanDied")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TitanHealth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TitanLevel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TitanName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TitanStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TitanType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TitanWasBorn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TitanXP")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TitanXPNextLevel")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PlayerProfileID");
-
-                    b.ToTable("TitanOwnerships");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -654,6 +589,33 @@ namespace GalacticTitans.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("GalacticTitans.Core.Domain.TitanOwnership", b =>
+                {
+                    b.HasBaseType("GalacticTitans.Core.Domain.Titan");
+
+                    b.Property<string>("IsOwnershipOfThisTitan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnedByPlayerProfile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OwnershipCreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OwnershipID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("OwnershipUpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PlayerProfileID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("PlayerProfileID");
+
+                    b.HasDiscriminator().HasValue("TitanOwnership");
+                });
+
             modelBuilder.Entity("GalacticTitans.Core.Domain.AstralBody", b =>
                 {
                     b.HasOne("GalacticTitans.Core.Domain.Titan", "TitanWhoOwnsThisPlanet")
@@ -670,13 +632,6 @@ namespace GalacticTitans.Data.Migrations
                         .HasForeignKey("AstralBodyAtCenterWithID");
 
                     b.Navigation("AstralBodyAtCenterWith");
-                });
-
-            modelBuilder.Entity("GalacticTitans.Core.Domain.TitanOwnership", b =>
-                {
-                    b.HasOne("GalacticTitans.Core.Domain.PlayerProfile", null)
-                        .WithMany("MyTitans")
-                        .HasForeignKey("PlayerProfileID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -728,6 +683,13 @@ namespace GalacticTitans.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GalacticTitans.Core.Domain.TitanOwnership", b =>
+                {
+                    b.HasOne("GalacticTitans.Core.Domain.PlayerProfile", null)
+                        .WithMany("MyTitans")
+                        .HasForeignKey("PlayerProfileID");
                 });
 
             modelBuilder.Entity("GalacticTitans.Core.Domain.PlayerProfile", b =>

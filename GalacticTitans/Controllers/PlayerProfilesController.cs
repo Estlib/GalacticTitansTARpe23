@@ -36,7 +36,7 @@ namespace GalacticTitans.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> NewProfile(Guid id)
         {
-            string userid = TempData["NewUserID"].ToString();
+            string userid = id.ToString();
             //if (ViewData["NewUserID"] == null)
             if (userid == null)
             {
@@ -53,7 +53,7 @@ namespace GalacticTitans.Controllers
             var newprofile = new PlayerProfile()
             {
                 ID = id,
-                ApplicationUserID = TempData["NewUserID"].ToString(),
+                ApplicationUserID = id.ToString(),
                 ScreenName = "NEWPROFILE",
                 GalacticCredits = 100,
                 ScrapResource = 0,
@@ -67,19 +67,25 @@ namespace GalacticTitans.Controllers
                 ProfileModifiedAt = DateTime.UtcNow,
             };
             TitanOwnership startingTitan = new();
+            var result = await _titansServices.CreateRandom(Guid.Parse(userid));
+            if (result == null)
+            {
+                return NotFound();
+            }
             //startingTitan = await TitansController.NewRandomTitanOwnership(startingTitan);// call controller method
-            newprofile.MyTitans.Add(startingTitan);
+            newprofile.MyTitans.Add(result);
             await _context.SaveChangesAsync();
             // TODO: caLll create ownership method from titanservices.
             // return here, into startingtitan, the generated titan
             // append this titan to the user
             // TODO: implement random titanownership for the new userprofile.
-            var result = await _context.PlayerProfiles.AddAsync(newprofile);
+            var resultProfile = await _context.PlayerProfiles.AddAsync(newprofile);
+            
             await _context.SaveChangesAsync();
 
             //Code provided by: Mel Kosk
             var user = await _context.Users.FindAsync(newprofile.ApplicationUserID);
-            user.PlayerProfileID = id;
+            user.PlayerProfileID = newprofile.ID;
             await _context.SaveChangesAsync();
 
             if (result == null)

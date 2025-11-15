@@ -7,16 +7,22 @@ using System.Threading.Tasks;
 
 namespace GalacticTitans.Core.Domain
 {
-    public class TitanOwnership : Titan
+    public class TitanOwnership 
     {
-        public Guid OwnershipID { get; set; }
+        public Guid ID { get; set; }
+
+        public string TitanName { get; set; }
+        public TitanType TitanType { get; set; }
         public int TitanHealth { get; set; }
         public int TitanXP { get; set; }
         public int TitanXPNextLevel { get; set; }
         public int TitanLevel { get; set; }
         public TitanStatus TitanStatus { get; set; }
+        public string PrimaryAttackName { get; set; }
         public int PrimaryAttackPower { get; set; }
+        public string SecondaryAttackName { get; set; }
         public int SecondaryAttackPower { get; set; }
+        public string SpecialAttackName { get; set; }
         public int SpecialAttackPower { get; set; }
         public DateTime TitanWasBorn { get; set; }
         public DateTime TitanDied { get; set; }
