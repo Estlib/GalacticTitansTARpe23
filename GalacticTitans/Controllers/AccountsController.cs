@@ -231,6 +231,7 @@ namespace GalacticTitans.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            var redirectGuid = string.Empty;
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser()
@@ -260,7 +261,9 @@ namespace GalacticTitans.Controllers
                         return RedirectToAction("ListUsers", "Administrations");
                     }
 
-                    return RedirectToAction("NewProfile", "PlayerProfiles");
+                    //return RedirectToAction("NewProfile", "PlayerProfiles", user.Id);
+                    redirectGuid = user.Id;
+
 
                     //List<string> errordatas = 
                     //    [
@@ -295,7 +298,9 @@ namespace GalacticTitans.Controllers
                     return View("~/Views/Shared/Error.cshtml", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
                 }
             }
-            return RedirectToAction("AccountCreated");
+            //return RedirectToAction("AccountCreated");
+            
+            return RedirectToAction("NewProfile", "PlayerProfiles", new { id = redirectGuid });
         }
         [HttpGet]
         public IActionResult AccountCreated()

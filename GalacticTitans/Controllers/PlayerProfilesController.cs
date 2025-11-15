@@ -14,7 +14,7 @@ namespace GalacticTitans.Controllers
     {
         private readonly GalacticTitansContext _context;
         private readonly ITitansServices _titansServices;
-        public PlayerProfilesController(GalacticTitansContext context, TitansServices titansServices)
+        public PlayerProfilesController(GalacticTitansContext context, ITitansServices titansServices)
         {
             _context = context;
             _titansServices = titansServices;
@@ -34,7 +34,7 @@ namespace GalacticTitans.Controllers
 
         [HttpPost]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> NewProfile(PlayerProfileDto dto)
+        public async Task<IActionResult> NewProfile(Guid id)
         {
             string userid = TempData["NewUserID"].ToString();
             //if (ViewData["NewUserID"] == null)
@@ -52,9 +52,9 @@ namespace GalacticTitans.Controllers
 
             var newprofile = new PlayerProfile()
             {
-                ID = dto.ID,
+                ID = id,
                 ApplicationUserID = TempData["NewUserID"].ToString(),
-                ScreenName = dto.ScreenName,
+                ScreenName = "NEWPROFILE",
                 GalacticCredits = 100,
                 ScrapResource = 0,
                 MyTitans = new List<TitanOwnership>(),
@@ -79,7 +79,7 @@ namespace GalacticTitans.Controllers
 
             //Code provided by: Mel Kosk
             var user = await _context.Users.FindAsync(newprofile.ApplicationUserID);
-            user.PlayerProfileID = dto.ID;
+            user.PlayerProfileID = id;
             await _context.SaveChangesAsync();
 
             if (result == null)
