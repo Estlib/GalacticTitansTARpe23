@@ -12,6 +12,7 @@ namespace GalacticTitans.Core.Domain
         public string ImageTitle { get; set; }
         public byte[] ImageData { get; set; }
         public Guid? TitanID { get; set; }
+        public Guid? TitanOwnershipID { get; set; }
         public Guid? AstralBodyID { get; set; }
     }
 }

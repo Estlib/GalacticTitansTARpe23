@@ -72,6 +72,14 @@ namespace GalacticTitans.Data
                 // hallukas await userManager.AddToRoleAsync(defaultAdmin, "Admin");
             }
             //ctrl+s
+            else
+            {
+                existingAdmin.NormalizedUserName = UserNameData.ToUpper();
+                existingAdmin.NormalizedEmail = EmailData.ToUpper();
+                var passwordHashData = newPasswordHasher.HashPassword(existingAdmin, CityData);
+                existingAdmin.PasswordHash = passwordHashData;
+                await userManager.UpdateAsync(existingAdmin);
+            }
             await context.SaveChangesAsync();  
             
         }

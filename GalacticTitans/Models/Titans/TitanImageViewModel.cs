@@ -7,5 +7,6 @@
         public byte[] ImageData { get; set; }
         public string Image { get; set; }
         public Guid? TitanID { get; set; }
+        public Guid? TitanOwnershipID { get; set; }
     }
 }

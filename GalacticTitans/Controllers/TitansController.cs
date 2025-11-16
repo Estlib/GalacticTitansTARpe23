@@ -435,6 +435,7 @@ namespace GalacticTitans.Controllers
             //find the source titan, based on random integer
             var sourceTitan = _context.Titans.OrderByDescending(x => x.TitanName).Take(RNG);
 
+
             var dto = new TitanOwnershipDto()
             {
                 TitanName = vm.AddedTitan.TitanName,
@@ -493,6 +494,33 @@ namespace GalacticTitans.Controllers
             return randomtitan;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MyTitans(Guid id)
+        {
+            var thisUserOwnerships = await _context.TitanOwnerships
+                .Where(to => to.OwnedByPlayerProfile == id.ToString())
+                .OrderByDescending(to => to.TitanLevel)
+                .ToListAsync();
 
+            var resultingInventory = thisUserOwnerships
+                .Select(x => new TitanOwnershipIndexViewModel
+                {
+                    TitanOwnershipID = x.TitanOwnershipID,
+                    TitanName = x.TitanName,
+                    TitanType = (Models.Titans.TitanType)(Core.Dto.TitanType)x.TitanType,
+                    TitanLevel = x.TitanLevel,
+                    Image = (List<TitanImageViewModel>)_context.FilesToDatabase
+                       .Where(t => t.TitanID == Guid.Parse(x.IsOwnershipOfThisTitan))
+                       .Select(z => new TitanImageViewModel
+                       {
+                           TitanID = z.TitanOwnershipID,
+                           ImageID = z.ID,
+                           ImageData = z.ImageData,
+                           ImageTitle = z.ImageTitle,
+                           Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(z.ImageData))
+                       }).ToList()
+                }).ToArray();
+            return View(resultingInventory);
+        }
     }
 }

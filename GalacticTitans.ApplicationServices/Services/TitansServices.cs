@@ -136,7 +136,7 @@ namespace GalacticTitans.ApplicationServices.Services
             TitanOwnership titan = new TitanOwnership();
 
             // set by service
-            titan.ID = Guid.NewGuid();
+            titan.TitanOwnershipID = Guid.NewGuid();
             titan.TitanHealth = 100;
             titan.TitanXP = 0;
             titan.TitanXPNextLevel = 100;
@@ -178,7 +178,7 @@ namespace GalacticTitans.ApplicationServices.Services
             TitanOwnership titan = new TitanOwnership();
 
             // set by service
-            titan.ID = Guid.NewGuid();
+            titan.TitanOwnershipID = Guid.NewGuid();
             titan.TitanHealth = 100;
             titan.TitanXP = 0;
             titan.TitanXPNextLevel = 100;

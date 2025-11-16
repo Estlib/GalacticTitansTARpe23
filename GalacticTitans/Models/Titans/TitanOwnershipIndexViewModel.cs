@@ -1,16 +1,7 @@
-﻿using GalacticTitans.Core.Domain.SupportingDomain;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GalacticTitans.Core.Domain
+﻿namespace GalacticTitans.Models.Titans
 {
-    public class TitanOwnership 
+    public class TitanOwnershipIndexViewModel
     {
-        [Key]
         public Guid TitanOwnershipID { get; set; }
 
         public string TitanName { get; set; }
@@ -28,6 +19,7 @@ namespace GalacticTitans.Core.Domain
         public int SpecialAttackPower { get; set; }
         public DateTime TitanWasBorn { get; set; }
         public DateTime TitanDied { get; set; }
+        public List<TitanImageViewModel> Image { get; set; } = new List<TitanImageViewModel>();
         public string? OwnedByPlayerProfile { get; set; } //is string but holds guid, id of player whom the ownership belongs to
         public string? IsOwnershipOfThisTitan { get; set; } //is string but holds guid, id of titan that this ownership is based on
 
