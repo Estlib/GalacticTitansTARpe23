@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.vs/GalacticTitans/DesignTimeBuild
+/.vs/GalacticTitans/v17
+/.vs
+/GalacticTitans/obj

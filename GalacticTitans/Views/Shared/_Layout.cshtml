@@ -18,6 +18,15 @@
     <link rel="stylesheet" href="~/css/gameStyle.css" asp-append-version="true" />
 </head>
 <body>
+@*     <iframe id="audio-frame"
+            src="@Url.Action("AudioPlayer", "Audio")"
+@*             style="style=" width:300px; 
+                           height:200px; 
+                           border:2px solid red;
+                           pointer-events:none;
+                           position:absolute;"> 
+            style="width:0;height:0;border:0;opacity:0;pointer-events:none;position:absolute;">
+    </iframe> *@
     <header class="galacticGradient">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 galacticGradient">
             <div class="container-fluid ">
@@ -31,6 +40,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+@*                         <li>
+                            <div class="nav-link text-dark gTZRG id="layout-loaded-time">
+                                Layout loaded at: @DateTime.Now.ToLongTimeString()
+                            </div>
+                        </li> *@
                         @* 
                             TODO: rewrite getting claim, using proper microsoft documentation.
                             this hack works, but its a hack.
@@ -54,6 +68,7 @@
                             Guid userid = Guid.Parse(empty);
                             var user = await userManager.FindByIdAsync(userid.ToString());
                             userprofile = await PlayerProfilesServices.DetailsAsync(userid);
+                            ViewData["thisPlayer"] = userprofile;
                             if  (user == null)
                             {
                                 @:Could not find user.
@@ -108,7 +123,7 @@
 
                                 <li class="nav-item">
                                     <form method="post" asp-controller="Accounts" asp-action="Logout">
-                                        <button type="submit" class="nav-link btn btn-link py-0" style="width:auto; padding-top: 0.8rem;">
+                                        <button type="submit" class="nav-link btn btn-link py-0 gTZRG" style="width:auto; padding-top: 0.8rem;">
                                             Logout @userprofile.ScreenName @* @User.Identity.Name *@
                                         </button>
                                     </form>
@@ -125,6 +140,10 @@
                                 <a class="nav-link text-dark" asp-controller="Accounts" asp-action="Login">Login</a>
                             </li>
                         }
+                        <li>
+                            @* <button id="bgm-toggle">Play Music</button> *@
+                            @* <button class="text-dark" id="start-music">Start Music</button> *@
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -161,6 +180,7 @@
             Guid userid = Guid.Parse(empty);
             var user = await userManager.FindByIdAsync(userid.ToString());
             userprofile = await PlayerProfilesServices.DetailsAsync(userid);
+
             if (user == null)
             {
                 @:Could not find user.
@@ -187,6 +207,9 @@
             <div class="container text-dark">
                 &copy; 2024 - Galactic Titans - <a class="text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="Privacy">Terms of Usage</a>
             </div>
+            <div>
+            </div>
+            
         }
     </footer >
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

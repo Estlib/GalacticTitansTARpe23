@@ -1,4 +1,5 @@
-﻿using GalacticTitans.Core.Domain;
+﻿using GalacticTitans.ApplicationServices.Services;
+using GalacticTitans.Core.Domain;
 using GalacticTitans.Core.Dto;
 using GalacticTitans.Core.ServiceInterface;
 using GalacticTitans.Data;
@@ -20,12 +21,14 @@ namespace GalacticTitans.Controllers
         private readonly GalacticTitansContext _context;
         private readonly ITitansServices _titansServices;
         private readonly IFileServices _fileServices;
+        private readonly IPlayerProfilesServices _playerProfilesServices;
 
-        public TitansController(GalacticTitansContext context, ITitansServices titansServices, IFileServices fileServices)
+        public TitansController(GalacticTitansContext context, ITitansServices titansServices, IFileServices fileServices, IPlayerProfilesServices playerProfilesServices)
         {
             _context = context;
             _titansServices = titansServices;
             _fileServices = fileServices;
+            _playerProfilesServices = playerProfilesServices;
         }
 
 
@@ -520,7 +523,12 @@ namespace GalacticTitans.Controllers
                            Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(z.ImageData))
                        }).ToList()
                 }).ToArray();
+
+            
+            var profile = await _playerProfilesServices.DetailsAsync(Guid.Parse(id.ToString()));
+            ViewData["thisPlayer"] = profile;
             return View(resultingInventory);
+
         }
     }
 }
