@@ -5,6 +5,7 @@ using GalacticTitans.Core.Dto.AccountsDtos;
 using GalacticTitans.Core.ServiceInterface;
 using GalacticTitans.Data;
 using GalacticTitans.Models;
+using GalacticTitans.Models.Profiles;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -34,7 +35,7 @@ namespace GalacticTitans.Controllers
 
         [HttpPost]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> NewProfile(Guid id)
+        public async Task<IActionResult> NewProfile(ProfileRegisterViewModel profile, Guid id)
         {
             string userid = id.ToString();
             //if (ViewData["NewUserID"] == null)
@@ -54,7 +55,7 @@ namespace GalacticTitans.Controllers
             {
                 ID = id,
                 ApplicationUserID = id.ToString(),
-                ScreenName = "NEWPROFILE",
+                ScreenName = profile.ScreenName,
                 GalacticCredits = 100,
                 ScrapResource = 0,
                 MyTitans = new List<TitanOwnership>(),

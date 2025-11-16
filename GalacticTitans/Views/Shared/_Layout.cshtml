@@ -54,15 +54,24 @@
                             Guid userid = Guid.Parse(empty);
                             var user = await userManager.FindByIdAsync(userid.ToString());
                             userprofile = await PlayerProfilesServices.DetailsAsync(userid);
-                            if (user.ProfileType == true)
+                            if  (user == null)
                             {
+                                @:Could not find user.
+                            }
+                            else if (user.ProfileType == null)
+                            {
+                                @:Could not find users profile.
+                            }
+                            else if (user.ProfileType == true)
+                                                {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark gTZRG" asp-area="" asp-controller="AdminAreas" asp-action="Index">Admin Panel</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-dark gTZRG" asp-area="" asp-controller="Emails" asp-action="Index">Test Email Sending</a>
-                                </li>                                
+                                </li>
                             }
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark gTZRG" asp-area="" asp-controller="Titans" asp-action="Index">My Titans</a>
                             </li>
@@ -152,7 +161,15 @@
             Guid userid = Guid.Parse(empty);
             var user = await userManager.FindByIdAsync(userid.ToString());
             userprofile = await PlayerProfilesServices.DetailsAsync(userid);
-            if (user.ProfileType == true)
+            if (user == null)
+            {
+                @:Could not find user.
+            }
+            else if (user.ProfileType == null)
+            {
+                @:Could not find users profile.
+            }
+            else if (user.ProfileType == true)
             {
                 <div class="container text-dark">
                     &copy; 2024 - Galactic Titans - <a class="text-dark gTZRG" asp-area="" asp-controller="Home" asp-action="ResourceListing">Developer Resources</a>
