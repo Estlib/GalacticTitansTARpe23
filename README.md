@@ -13,6 +13,7 @@ Purposeful branches:
 - 4-Email: Implementation of email sending functionality aswell as sending emails whenever someone registers
 - 5-Player: Branch for the start of implementation for Users to have a PlayerProfile, and Titans additional helper object - TitanOwnership. This branch needed work to be completed in 3-2 first, and thus, is succeeded by 5-2
 - 5-2-PlayerContinue: Branch for the continued implementation for users, playerprofile and titanownership.
+- 6-1-PlayerDashboard: Implementation of the dashboard for player, which will be the major attraction where other gameloop activities are done from. This branch is intended for the dashboard development, including player being able to obtain new titans, see existing ones, all within players dashboard.
 
 Merge branches (the purpose of these is to merge other branches and to base off new objects):
 - Merge(main-x-unstable) <- this branch implemented style into the main
